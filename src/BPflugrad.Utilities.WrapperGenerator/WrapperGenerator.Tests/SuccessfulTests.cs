@@ -12,14 +12,15 @@ namespace BPflugrad.Utilities.WrapperGenerator.Tests
         {
             var fileWrapper = new FileWrapper();
 
-            var generator = new Generator(fileWrapper);
+            var generator = new Generator("Tests", fileWrapper);
 
             generator.Generate(typeof(SimpleUnmockableClass));
 
-            Assert.Equal("public interface ISimpleUnmockableClass\n{\n\tstring ReturnString(string input);\n}", fileWrapper.ContentsDictionary["Interfaces/ISimpleUnmockableClass.cs"]);
+            Assert.Equal("namespace Tests.Interfaces\n{\n\tpublic interface ISimpleUnmockableClassWrapper\n\t{\n\t\tstring ReturnString(string input);\n\t}\n}", fileWrapper.ContentsDictionary["Interfaces/ISimpleUnmockableClassWrapper.cs"]);
+            Assert.Equal("using Tests.Interfaces;\nusing BPflugrad.Utilities.WrapperGenerator.Tests;\n\nnamespace Tests\n{\n\tpublic class SimpleUnmockableClassWrapper : ISimpleUnmockableClassWrapper\n\t{\n\t\tprivate readonly SimpleUnmockableClass _simpleUnmockableClass = new SimpleUnmockableClass();\n\n\t\tpublic string ReturnString(string input) => _simpleUnmockableClass.ReturnString(input);\n\t}\n}", fileWrapper.ContentsDictionary["SimpleUnmockableClassWrapper.cs"]);
         }
 
-        private sealed class SimpleUnmockableClass
+        public sealed class SimpleUnmockableClass
         {
             public string ReturnString(string input)
                 => input;

@@ -4,5 +4,32 @@
         <name>WrapperGenerator</name>
     </assembly>
     <members>
+        <member name="T:BPflugrad.Utilities.WrapperGenerator.Generator">
+            <summary>
+            Generates an interface and class capable of wrapping a class such that it can be used in unit testing.
+            </summary>
+        </member>
+        <member name="M:BPflugrad.Utilities.WrapperGenerator.Generator.#ctor(System.String,WrapperGenerator.Wrappers.Interfaces.IFileWrapper)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="namespaceBase">Base Namespace in which the generated code will be created.</param>
+            <param name="fileWrapper">Optional wrapper for <seealso cref="T:System.IO.File"/> since it is static.</param>
+        </member>
+        <member name="M:BPflugrad.Utilities.WrapperGenerator.Generator.Build(System.Type[])">
+            <summary>
+            Builds the interfaces and classes and outputs them to disc.
+            </summary>
+            <param name="types">Types to be wrapped.</param>
+        </member>
+        <member name="M:BPflugrad.Utilities.WrapperGenerator.Generator.GetTypeName(System.Type)">
+            <summary>
+            Transforms .Net type names to Integral Value Types.
+            </summary>
+            <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types"/>
+            <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/reference-types"/>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

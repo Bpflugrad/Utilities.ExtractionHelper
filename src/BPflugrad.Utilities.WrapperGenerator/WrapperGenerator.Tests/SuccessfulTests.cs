@@ -21,46 +21,45 @@ namespace BPflugrad.Utilities.WrapperGenerator.Tests
 
             var interfaceString = "namespace Tests.Interfaces\n";
             interfaceString += "{\n";
-            interfaceString += "\tpublic interface ISimpleUnmockableClassWrapper\n";
+            interfaceString += $"\tpublic interface I{nameof(SimpleUnmockableClass)}Wrapper\n";
             interfaceString += "\t{\n";
             interfaceString += "\t\tstring ReturnString(string input);\n";
             interfaceString += "\t}\n";
             interfaceString += "}";
 
-            Assert.Equal(interfaceString, fileWrapper.ContentsDictionary["Interfaces/ISimpleUnmockableClassWrapper.cs"]);
+            Assert.Equal(interfaceString, fileWrapper.ContentsDictionary[$"Interfaces/I{nameof(SimpleUnmockableClass)}Wrapper.cs"]);
 
             var classString = "using Tests.Interfaces;\n";
             classString += "using BPflugrad.Utilities.WrapperGenerator.Tests;\n";
             classString += "\n";
             classString += "namespace Tests\n";
             classString += "{\n";
-            classString += "\tpublic class SimpleUnmockableClassWrapper : ISimpleUnmockableClassWrapper\n";
+            classString += $"\tpublic class {nameof(SimpleUnmockableClass)}Wrapper : I{nameof(SimpleUnmockableClass)}Wrapper\n";
             classString += "\t{\n";
-            classString += "\t\tprivate readonly SuccessfulTests.SimpleUnmockableClass _simpleUnmockableClass = new SuccessfulTests.SimpleUnmockableClass();\n";
+            classString += $"\t\tprivate readonly SuccessfulTests.{nameof(SimpleUnmockableClass)} _simpleUnmockableClass = new SuccessfulTests.{nameof(SimpleUnmockableClass)}();\n";
             classString += "\n";
             classString += "\t\tpublic string ReturnString(string input)\n";
             classString += "\t\t\t=> _simpleUnmockableClass.ReturnString(input);\n";
             classString += "\t}\n";
             classString += "}";
 
-            Assert.Equal(classString, fileWrapper.ContentsDictionary["SimpleUnmockableClassWrapper.cs"]);
+            Assert.Equal(classString, fileWrapper.ContentsDictionary[$"{nameof(SimpleUnmockableClass)}Wrapper.cs"]);
         }
 
         [Fact]
-        public void ComplexUnmockableClassExpectsSuccess()
+        public void PublicReadonlyFieldClassExpectsSuccess()
         {
-            Assert.Throws<NotSupportedException>(() => new Mock<ComplexUnmockableClass>());
+            Assert.Throws<NotSupportedException>(() => new Mock<PublicReadonlyFieldClass>());
 
             var fileWrapper = new FileWrapper();
 
             var generator = new Generator("ComplexTests", fileWrapper);
 
-            generator.Build(typeof(ComplexUnmockableClass));
+            generator.Build(typeof(PublicReadonlyFieldClass));
 
-            //Assert.Equal("namespace ComplexTests.Interfaces\n{\n\tpublic interface IComplexUnmockableClassWrapper\n\t{\n\t\tint PublicReadonlyIntField { get; }\n\t\tstring PublicStringField { get; set;}\n\t\tlong PublicLongProperty { get; set; }\n\t\tint PublicGetOnlyIntProperty { get; }\n\t}\n}", fileWrapper.ContentsDictionary["Interfaces/IComplexUnmockableClassWrapper.cs"]);
             var interfaceString = "namespace ComplexTests.Interfaces\n";
             interfaceString += "{\n";
-            interfaceString += "\tpublic interface IComplexUnmockableClassWrapper\n";
+            interfaceString += "\tpublic interface IPublicReadonlyFieldClassWrapper\n";
             interfaceString += "\t{\n";
             interfaceString += "\t\tshort PublicReadonlyShortField { get; }\n";
             interfaceString += "\t\tint PublicReadonlyIntField { get; }\n";
@@ -81,53 +80,134 @@ namespace BPflugrad.Utilities.WrapperGenerator.Tests
             interfaceString += "\t}\n";
             interfaceString += "}";
 
-            Assert.Equal(interfaceString, fileWrapper.ContentsDictionary["Interfaces/IComplexUnmockableClassWrapper.cs"]);
+            Assert.Equal(interfaceString, fileWrapper.ContentsDictionary["Interfaces/IPublicReadonlyFieldClassWrapper.cs"]);
 
             var classString = "using ComplexTests.Interfaces;\n";
             classString += "using BPflugrad.Utilities.WrapperGenerator.Tests;\n";
             classString += "\n";
             classString += "namespace ComplexTests\n";
             classString += "{\n";
-            classString += "\tpublic class ComplexUnmockableClassWrapper : IComplexUnmockableClassWrapper\n";
+            classString += "\tpublic class PublicReadonlyFieldClassWrapper : IPublicReadonlyFieldClassWrapper\n";
             classString += "\t{\n";
-            classString += "\t\tprivate readonly SuccessfulTests.ComplexUnmockableClass _complexUnmockableClass = new SuccessfulTests.ComplexUnmockableClass();\n";
+            classString += "\t\tprivate readonly SuccessfulTests.PublicReadonlyFieldClass _publicReadonlyFieldClass = new SuccessfulTests.PublicReadonlyFieldClass();\n";
             classString += "\n";
             classString += "\t\tpublic short PublicReadonlyShortField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyShortField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyShortField;\n";
             classString += "\t\tpublic int PublicReadonlyIntField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyIntField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyIntField;\n";
             classString += "\t\tpublic long PublicReadonlyLongField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyLongField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyLongField;\n";
             classString += "\t\tpublic sbyte PublicReadonlySByteField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlySByteField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlySByteField;\n";
             classString += "\t\tpublic byte PublicReadonlyByteField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyByteField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyByteField;\n";
             classString += "\t\tpublic ushort PublicReadonlyUShortField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyUShortField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyUShortField;\n";
             classString += "\t\tpublic uint PublicReadonlyUIntField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyUIntField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyUIntField;\n";
             classString += "\t\tpublic ulong PublicReadonlyULongField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyULongField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyULongField;\n";
             classString += "\t\tpublic nint PublicReadonlyNIntField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyNIntField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyNIntField;\n";
             classString += "\t\tpublic nuint PublicReadonlyNUIntField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyNUIntField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyNUIntField;\n";
             classString += "\t\tpublic float PublicReadonlyFloatField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyFloatField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyFloatField;\n";
             classString += "\t\tpublic double PublicReadonlyDoubleField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyDoubleField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyDoubleField;\n";
             classString += "\t\tpublic decimal PublicReadonlyDecimalField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyDecimalField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyDecimalField;\n";
             classString += "\t\tpublic string PublicReadonlyStringField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyStringField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyStringField;\n";
             classString += "\t\tpublic object PublicReadonlyObjectField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyObjectField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyObjectField;\n";
             classString += "\t\tpublic bool PublicReadonlyBoolField { get; }\n";
-            classString += "\t\t\t=> _complexUnmockableClass.PublicReadonlyBoolField;\n";
+            classString += "\t\t\t=> _publicReadonlyFieldClass.PublicReadonlyBoolField;\n";
             classString += "\t}\n";
             classString += "}";
 
-            Assert.Equal(classString, fileWrapper.ContentsDictionary["ComplexUnmockableClassWrapper.cs"]);
+            Assert.Equal(classString, fileWrapper.ContentsDictionary["PublicReadonlyFieldClassWrapper.cs"]);
+        }
+
+        [Fact]
+        public void PublicStaticGetOnlyPropertyClassExpectsSuccess()
+        {
+            var fileWrapper = new FileWrapper();
+
+            var generator = new Generator("ComplexTests", fileWrapper);
+
+            generator.Build(typeof(PublicStaticGetOnlyPropertyClass));
+
+            var interfaceString = "namespace ComplexTests.Interfaces\n";
+            interfaceString += "{\n";
+            interfaceString += $"\tpublic interface I{nameof(PublicStaticGetOnlyPropertyClass)}Wrapper\n";
+            interfaceString += "\t{\n";
+            interfaceString += "\t\tstring PublicGetOnlyStringProperty { get; }\n";
+            interfaceString += "\t}\n";
+            interfaceString += "}";
+
+            Assert.Equal(interfaceString, fileWrapper.ContentsDictionary[$"Interfaces/I{nameof(PublicStaticGetOnlyPropertyClass)}Wrapper.cs"]);
+
+            var classString = "using ComplexTests.Interfaces;\n";
+            classString += "using BPflugrad.Utilities.WrapperGenerator.Tests;\n";
+            classString += "\n";
+            classString += "namespace ComplexTests\n";
+            classString += "{\n";
+            classString += $"\tpublic class {nameof(PublicStaticGetOnlyPropertyClass)}Wrapper : I{nameof(PublicStaticGetOnlyPropertyClass)}Wrapper\n";
+            classString += "\t{\n";
+            classString += $"\t\tprivate readonly SuccessfulTests.{nameof(PublicStaticGetOnlyPropertyClass)} {PrivateName(nameof(PublicStaticGetOnlyPropertyClass))} = new SuccessfulTests.{nameof(PublicStaticGetOnlyPropertyClass)}();\n";
+            classString += "\n";
+            classString += "\t\tpublic string PublicGetOnlyStringProperty { get; }\n";
+            classString += $"\t\t\t=> {PrivateName(nameof(PublicStaticGetOnlyPropertyClass))}.PublicGetOnlyStringProperty;\n";
+            classString += "\t}\n";
+            classString += "}";
+
+            Assert.Equal(classString, fileWrapper.ContentsDictionary[$"{nameof(PublicStaticGetOnlyPropertyClass)}Wrapper.cs"]);
+        }
+
+        [Fact]
+        public void PublicStaticFieldClassExpectsSuccess()
+        {
+            var fileWrapper = new FileWrapper();
+
+            var generator = new Generator("ComplexTests", fileWrapper);
+
+            generator.Build(typeof(PublicStaticFieldClass));
+
+            var interfaceString = "namespace ComplexTests.Interfaces\n";
+            interfaceString += "{\n";
+            interfaceString += $"\tpublic interface I{nameof(PublicStaticFieldClass)}Wrapper\n";
+            interfaceString += "\t{\n";
+            interfaceString += "\t\tstring PublicStaticStringField { get; set; }\n";
+            interfaceString += "\t\tint PublicStaticIntField { get; set; }\n";
+            interfaceString += "\t}\n";
+            interfaceString += "}";
+
+            Assert.Equal(interfaceString, fileWrapper.ContentsDictionary[$"Interfaces/I{nameof(PublicStaticFieldClass)}Wrapper.cs"]);
+
+            var classString = "using ComplexTests.Interfaces;\n";
+            classString += "using BPflugrad.Utilities.WrapperGenerator.Tests;\n";
+            classString += "\n";
+            classString += "namespace ComplexTests\n";
+            classString += "{\n";
+            classString += $"\tpublic class {nameof(PublicStaticFieldClass)}Wrapper : I{nameof(PublicStaticFieldClass)}Wrapper\n";
+            classString += "\t{\n";
+            classString += $"\t\tprivate readonly SuccessfulTests.{nameof(PublicStaticFieldClass)} {PrivateName(nameof(PublicStaticFieldClass))} = new SuccessfulTests.{nameof(PublicStaticFieldClass)}();\n";
+            classString += "\n";
+            classString += "\t\tpublic string PublicStaticStringField\n";
+            classString += "\t\t{\n";
+            classString += $"\t\t\tget => {PrivateName(nameof(PublicStaticFieldClass))}.PublicStaticStringField;\n";
+            classString += $"\t\t\tset => {PrivateName(nameof(PublicStaticFieldClass))}.PublicStaticStringField = value;\n";
+            classString += "\t\t}\n";
+            classString += "\t\tpublic int PublicStaticIntField\n";
+            classString += "\t\t{\n";
+            classString += $"\t\t\tget => {PrivateName(nameof(PublicStaticFieldClass))}.PublicStaticIntField;\n";
+            classString += $"\t\t\tset => {PrivateName(nameof(PublicStaticFieldClass))}.PublicStaticIntField = value;\n";
+            classString += "\t\t}\n";
+            classString += "\t}\n";
+            classString += "}";
+
+            Assert.Equal(classString, fileWrapper.ContentsDictionary[$"{nameof(PublicStaticFieldClass)}Wrapper.cs"]);
         }
 
         public sealed class SimpleUnmockableClass
@@ -136,9 +216,11 @@ namespace BPflugrad.Utilities.WrapperGenerator.Tests
                 => input;
         }
 
-        public sealed class ComplexUnmockableClass
+        public sealed class PublicReadonlyFieldClass
         {
+            // Should not appear in the output.
             private readonly int _privateReadonlyIntField;
+            // Should not appear in the output.
             internal int ProtectedIntField { get; set; }
             public readonly short PublicReadonlyShortField;
             public readonly int PublicReadonlyIntField;
@@ -156,15 +238,22 @@ namespace BPflugrad.Utilities.WrapperGenerator.Tests
             public readonly string PublicReadonlyStringField;
             public readonly object PublicReadonlyObjectField;
             public readonly bool PublicReadonlyBoolField;
-            //public string PublicStringField;
-            //public long PublicLongProperty { get; set; }
-            //public int PublicGetOnlyIntProperty { get; }
-
-            //public ComplexUnmockableClass(int privateReadonlyIntField)
-            //{
-            //    _privateReadonlyIntField = privateReadonlyIntField;
-            //}
         }
+
+        public class PublicStaticGetOnlyPropertyClass
+        {
+            // Should not appear in the output.
+            private static string PrivateGetOnlyStringProperty { get; }
+            public static string PublicGetOnlyStringProperty { get; }
+        }
+
+        public static class PublicStaticFieldClass
+        {
+            public static string PublicStaticStringField;
+            public static int PublicStaticIntField;
+        }
+
+        private static string PrivateName(string name) => $"_{name[0].ToString().ToLower()}{name[1..]}";
 
         private class FileWrapper : IFileWrapper
         {

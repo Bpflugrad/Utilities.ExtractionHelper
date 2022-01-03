@@ -58,18 +58,21 @@ namespace BPflugrad.Utilities.WrapperGenerator
                     if (field.IsPublic)
                     {
                         interfaceString += $"\t\t{GetTypeName(field.FieldType)} {field.Name} ";
-                        classString += $"\t\tpublic {GetTypeName(field.FieldType)} {field.Name} ";
+                        classString += $"\t\tpublic {GetTypeName(field.FieldType)} {field.Name}";
                         if (field.IsInitOnly)
                         {
                             interfaceString += "{ get; }\n";
-                            classString += "{ get; }\n";
+                            classString += " { get; }\n";
                             classString += $"\t\t\t=> {privatePropertyName}.{field.Name};\n";
                         }
                         else
                         {
                             interfaceString += "{ get; set; }\n";
-                            classString += "{ get; set; }\n";
-                            classString += $"\t\t\t=> {privatePropertyName}.{field.Name};\n";
+                            classString += "\n";
+                            classString += "\t\t{\n";
+                            classString += $"\t\t\tget => {privatePropertyName}.{field.Name};\n";
+                            classString += $"\t\t\tset => {privatePropertyName}.{field.Name} = value;\n";
+                            classString += "\t\t}\n";
                         }
                     }
                 }
@@ -77,13 +80,29 @@ namespace BPflugrad.Utilities.WrapperGenerator
                 // Properties
                 foreach(var property in type.GetProperties())
                 {
-
+                    interfaceString += $"\t\t{GetTypeName(property.PropertyType)} {property.Name} ";
+                    classString += $"\t\tpublic {GetTypeName(property.PropertyType)} {property.Name}";
+                    if (property.CanRead && !property.CanWrite)
+                    {
+                        interfaceString += "{ get; }\n";
+                        classString += " { get; }\n";
+                        classString += $"\t\t\t=> {privatePropertyName}.{property.Name};\n";
+                    }
+                    else if(property.CanRead && property.CanWrite)
+                    {
+                        interfaceString += "{ get; set; }\n";
+                        classString += "\n";
+                        classString += "\t\t{\n";
+                        classString += $"\t\t\tget => {privatePropertyName}.{property.Name};\n";
+                        classString += $"\t\t\tset => {privatePropertyName}.{property.Name} = value;\n";
+                        classString += "\t\t}\n";
+                    }
                 }
 
                 // Methods
                 foreach(var method in type.GetMethods())
                 {
-                    if (method.DeclaringType == typeof(object))
+                    if (method.DeclaringType == typeof(object) || method.IsSpecialName)
                         continue;
 
                     interfaceString += $"\t\t{GetTypeName(method.ReturnType)} {method.Name}(";
